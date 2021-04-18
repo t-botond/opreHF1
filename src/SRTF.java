@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class RR {
+public class SRTF {
     private ArrayList<Task> list = new ArrayList<>();
     private Task currentTask=null;
     private int idoegyseg = 2;
-    public RR(){}
+    public SRTF(){}
     public void addList(ArrayList<Task> l){
         for(int i=0;i<l.size();++i)
             list.add(l.get(i));
@@ -13,20 +13,28 @@ public class RR {
     public void vegrehajt(boolean enabled){
         if(enabled) {
             if(list.size()!=0) {
-
-                if(currentTask==null)
-                    currentTask=list.get(0);
-
-                if(currentTask.getRrCnt() == idoegyseg || currentTask.done()){
+                for(int i=0;i<list.size();++i){
+                    if(list.get(i).done()){
+                        list.remove(list.get(i));
+                    }
+                }
+                Task tmp=list.get(0);
+                int c=0;
+                for(int i=0;i< list.size();++i){
+                    if(list.get(i).getLoket() <= tmp.getLoket()){
+                        if(list.get(i).getStartTime() >= tmp.getStartTime()) {
+                            tmp = list.get(i);
+                        }
+                    }
+                }
+                if(currentTask!=null && currentTask!=tmp) {
                     currentTask.stop();
                     list.remove(currentTask);
                     if(! currentTask.done())
                         list.add(currentTask);
-                    if(list.size() !=0)
-                        currentTask = list.get(0);
-                    else
-                        currentTask = null;
                 }
+
+                currentTask=tmp;
                 if(currentTask!=null)
                     currentTask.vegrehajt();
             }
